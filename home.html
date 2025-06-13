@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fitness Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>BMR & TDEE Calculator</h2>
+    <form id="calcForm">
+      <input type="number" id="age" placeholder="Age" required><br />
+      <input type="number" id="weight" placeholder="Weight (kg)" required><br />
+      <input type="number" id="height" placeholder="Height (cm)" required><br />
+      <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select><br />
+      <select id="activity">
+        <option value="1.2">Sedentary</option>
+        <option value="1.375">Lightly active</option>
+        <option value="1.55">Moderately active</option>
+        <option value="1.725">Very active</option>
+      </select><br />
+      <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+    <div id="results"></div>
+
+    <h2>7-Day Advice</h2>
+    <button onclick="showAdvice('loss')">Weight Loss</button>
+    <button onclick="showAdvice('gain')">Weight Gain</button>
+    <ul id="adviceList"></ul>
+  </div>
+
+  <script>
+    function calculate() {
+      let age = parseInt(document.getElementById("age").value);
+      let weight = parseFloat(document.getElementById("weight").value);
+      let height = parseFloat(document.getElementById("height").value);
+      let gender = document.getElementById("gender").value;
+      let activity = parseFloat(document.getElementById("activity").value);
+
+      let bmr = gender === "male" ?
+        10 * weight + 6.25 * height - 5 * age + 5 :
+        10 * weight + 6.25 * height - 5 * age - 161;
+
+      let tdee = bmr * activity;
+
+      document.getElementById("results").innerText =
+        `BMR: ${bmr.toFixed(2)} kcal/day\nTDEE: ${tdee.toFixed(2)} kcal/day`;
+    }
+
+    const advices = {
+      loss: [
+        "Drink more water.",
+        "Eat more fiber-rich foods.",
+        "Avoid sugary drinks.",
+        "Get 7-8 hours of sleep.",
+        "Exercise 30 minutes daily.",
+        "Eat home-cooked meals.",
+        "Avoid late-night snacks."
+      ],
+      gain: [
+        "Eat more calories than you burn.",
+        "Include protein in every meal.",
+        "Strength train regularly.",
+        "Snack often (nuts, smoothies).",
+        "Drink milk or gainers.",
+        "Avoid cardio overtraining.",
+        "Rest and recover."
+      ]
+    };
+
+    function showAdvice(type) {
+      const list = document.getElementById("adviceList");
+      list.innerHTML = "";
+      advices[type].forEach(tip => {
+        let li = document.createElement("li");
+        li.textContent = tip;
+        list.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
